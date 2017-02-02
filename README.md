@@ -21,7 +21,7 @@ Usage Examples are included.
 ## Usage
 
 To compile, import the project in Netbeans.
-Alternatively, download the binaries from http://adolfintel.com/?p=waifupnp/index.frag
+Alternatively, download the binaries from http://fdossena.com/?p=waifupnp/index.frag
 
 Once you have the .jar files:
 
