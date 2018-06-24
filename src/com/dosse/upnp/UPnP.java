@@ -94,7 +94,7 @@ public class UPnP {
      */
     public static boolean closePortTCP(int port) {
         if(!isUPnPAvailable()) return false;
-        return defaultGW.closePort(port, true);
+        return defaultGW.closePort(port, false);
     }
     
     /**
@@ -106,7 +106,7 @@ public class UPnP {
      */
     public static boolean closePortUDP(int port) {
         if(!isUPnPAvailable()) return false;
-        return defaultGW.closePort(port, false);
+        return defaultGW.closePort(port, true);
     }
     
     /**
