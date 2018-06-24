@@ -27,7 +27,7 @@ package com.dosse.upnp;
 public class UPnP {
 
     private static Gateway defaultGW = null;
-    private static final GatewayFinder finder = new GatewayFinder() {
+    private static GatewayFinder finder = new GatewayFinder() {
         @Override
         public void gatewayFound(Gateway g) {
             synchronized (finder) {
@@ -37,6 +37,29 @@ public class UPnP {
             }
         }
     };
+    /**
+     * a dangerous check for is it open now at the current millisecond
+     */
+    public static boolean isUPnPUpNow(){
+    	return defaultGW != null;
+    }
+    /**
+     * this method will take a while to instantiate do not call unless necessary 
+     */
+    public static void refresh()
+    {
+    	defaultGW = null;
+    	finder = new GatewayFinder() {
+    	    @Override
+    	    public void gatewayFound(Gateway g) {
+    	        synchronized (finder) {
+    	            if (defaultGW == null) {
+    	                defaultGW = g;
+    	            }
+    	        }
+    	    }
+    	};
+    }
 
     /**
      * Waits for UPnP to be initialized (takes ~3 seconds).<br>
