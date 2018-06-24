@@ -1,5 +1,5 @@
 # WaifUPnP 
-forked from WaifUPNP 1.0 with applied fix 1.1 and a refresh method() and also is upnp open now method. 
+forked from WaifUPNP 1.0 with applied fix 1.1(which I wrote for him) and a refresh method() and also is upnp open now method. 
 The orignal can be found here
 https://github.com/adolfintel/WaifUPnP
 
