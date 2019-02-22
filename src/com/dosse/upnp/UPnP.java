@@ -25,6 +25,7 @@ package com.dosse.upnp;
  * @author Federico
  */
 public class UPnP {
+    public static final String displayBox = "LibWaifUPnP";
 
     private static Gateway defaultGW = null;
     private static GatewayFinder finder = new GatewayFinder() {
@@ -46,7 +47,7 @@ public class UPnP {
     /**
      * this method will take a while to instantiate do not call unless necessary 
      */
-    public static void refresh()
+    public static void refreshProgram()
     {
     	defaultGW = null;
     	finder = new GatewayFinder() {
@@ -85,6 +86,15 @@ public class UPnP {
         waitInit();
         return defaultGW!=null;
     }
+    
+    /**
+     * used the display string to show up on router box yourself
+     */
+    @Deprecated
+    public static boolean openPortTCP(int port)
+    {
+    	return openPortTCP(port, displayBox);
+    }
 
     /**
      * Opens a TCP port on the gateway
@@ -92,9 +102,21 @@ public class UPnP {
      * @param port TCP port (0-65535)
      * @return true if the operation was successful, false otherwise
      */
-    public static boolean openPortTCP(int port) {
-        if(!isUPnPAvailable()) return false;
-        return defaultGW.openPort(port, false);
+    public static boolean openPortTCP(int port, String display) 
+    {
+        if(!isUPnPAvailable()){
+        	return false;
+        }
+        return defaultGW.openPort(port, false, display);
+    }
+    
+    /**
+     * used the display string to show up on router box yourself
+     */
+    @Deprecated
+    public static boolean openPortUDP(int port)
+    {
+    	return openPortUDP(port, displayBox);
     }
     
     /**
@@ -103,9 +125,9 @@ public class UPnP {
      * @param port UDP port (0-65535)
      * @return true if the operation was successful, false otherwise
      */
-    public static boolean openPortUDP(int port) {
+    public static boolean openPortUDP(int port, String display) {
         if(!isUPnPAvailable()) return false;
-        return defaultGW.openPort(port, true);
+        return defaultGW.openPort(port, true, display);
     }
     
     /**
