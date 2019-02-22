@@ -12,3 +12,6 @@ In the example add scheduling makes it port forward in a seperate thread so it d
 
 Liscense 
 https://www.gnu.org/licenses/lgpl
+
+Example Ussage for program
+https://minecraft.curseforge.com/projects/lan-essentials
