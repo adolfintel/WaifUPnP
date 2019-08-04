@@ -18,18 +18,11 @@
  */
 package com.dosse.upnp;
 
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.NetworkInterface;
-import java.net.SocketTimeoutException;
+import java.net.*;
 import java.util.Enumeration;
 import java.util.LinkedList;
 
 /**
- *
  * @author Federico
  */
 abstract class GatewayFinder {
@@ -44,40 +37,6 @@ abstract class GatewayFinder {
         SEARCH_MESSAGES = m.toArray(new String[]{});
     }
 
-    private class GatewayListener extends Thread {
-
-        private Inet4Address ip;
-        private String req;
-
-        public GatewayListener(Inet4Address ip, String req) {
-            setName("WaifUPnP - Gateway Listener");
-            this.ip = ip;
-            this.req = req;
-        }
-
-        @Override
-        public void run() {
-            try {
-                byte[] req = this.req.getBytes();
-                DatagramSocket s = new DatagramSocket(new InetSocketAddress(ip, 0));
-                s.send(new DatagramPacket(req, req.length, new InetSocketAddress("239.255.255.250", 1900)));
-                s.setSoTimeout(3000);
-                for (;;) {
-                    try {
-                        DatagramPacket recv = new DatagramPacket(new byte[1536], 1536);
-                        s.receive(recv);
-                        Gateway gw = new Gateway(recv.getData(), ip);
-                        gatewayFound(gw);
-                    } catch (SocketTimeoutException t) {
-                        break;
-                    } catch (Throwable t) {
-                    }
-                }
-            } catch (Throwable t) {
-            }
-        }
-    }
-
     private LinkedList<GatewayListener> listeners = new LinkedList<GatewayListener>();
 
     public GatewayFinder() {
@@ -89,17 +48,6 @@ abstract class GatewayFinder {
             }
         }
     }
-
-    public boolean isSearching() {
-        for (GatewayListener l : listeners) {
-            if (l.isAlive()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public abstract void gatewayFound(Gateway g);
 
     private static Inet4Address[] getLocalIPs() {
         LinkedList<Inet4Address> ret = new LinkedList<Inet4Address>();
@@ -127,6 +75,51 @@ abstract class GatewayFinder {
         } catch (Throwable t) {
         }
         return ret.toArray(new Inet4Address[]{});
+    }
+
+    public boolean isSearching() {
+        for (GatewayListener l : listeners) {
+            if (l.isAlive()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public abstract void gatewayFound(Gateway g);
+
+    private class GatewayListener extends Thread {
+
+        private Inet4Address ip;
+        private String req;
+
+        public GatewayListener(Inet4Address ip, String req) {
+            setName("WaifUPnP - Gateway Listener");
+            this.ip = ip;
+            this.req = req;
+        }
+
+        @Override
+        public void run() {
+            try {
+                byte[] req = this.req.getBytes();
+                DatagramSocket s = new DatagramSocket(new InetSocketAddress(ip, 0));
+                s.send(new DatagramPacket(req, req.length, new InetSocketAddress("239.255.255.250", 1900)));
+                s.setSoTimeout(3000);
+                for (; ; ) {
+                    try {
+                        DatagramPacket recv = new DatagramPacket(new byte[1536], 1536);
+                        s.receive(recv);
+                        Gateway gw = new Gateway(recv.getData(), ip);
+                        gatewayFound(gw);
+                    } catch (SocketTimeoutException t) {
+                        break;
+                    } catch (Throwable t) {
+                    }
+                }
+            } catch (Throwable t) {
+            }
+        }
     }
 
 }

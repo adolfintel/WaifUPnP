@@ -18,13 +18,6 @@
  */
 package com.dosse.upnp;
 
-import java.net.HttpURLConnection;
-import java.net.Inet4Address;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.StringTokenizer;
-import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -32,8 +25,15 @@ import org.w3c.dom.traversal.DocumentTraversal;
 import org.w3c.dom.traversal.NodeFilter;
 import org.w3c.dom.traversal.NodeIterator;
 
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.net.HttpURLConnection;
+import java.net.Inet4Address;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.StringTokenizer;
+
 /**
- * 
  * @author Federico
  */
 class Gateway {
@@ -161,6 +161,7 @@ class Gateway {
             Map<String, String> r = command("AddPortMapping", params);
             return r.get("errorCode") == null;
         } catch (Exception ex) {
+            ex.printStackTrace();
             return false;
         }
     }
