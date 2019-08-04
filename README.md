@@ -2,7 +2,7 @@
 
 UPnP Port Forwarding for Java couldn't be any easier!
 
-WaifUPnP is an _extermely_ lightweight Java library that allows you to:
+WaifUPnP is an _extremely_ lightweight Java library that allows you to:
 
 - open/close TCP/UDP ports
 - check if there's an UPnP router available
@@ -16,11 +16,24 @@ It's as easy as:
 UPnP.openTCP(<port number here>);
 ```
 
-Usage Examples are included.
+See examples below.
 
 ## Usage
 
-To compile, import the project in Netbeans.
+To compile, you can just use maven:
+```
+mvn clean install
+```
+
+Then, import it into your project:
+```xml
+<dependency>
+    <groupId>com.fdossena</groupId>
+    <artifactId>waifupnp</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+</dependency>
+```
+
 Alternatively, download the binaries from http://fdossena.com/?p=waifupnp/index.frag
 
 Once you have the .jar files:
@@ -28,6 +41,37 @@ Once you have the .jar files:
 - Import `WaifUPnP.jar` into your application
 - Optionally, import `WaifUPnP-javadoc.jar` if you need JavaDoc
 - `WaifUPnP-sources.jar` contains the source code and should not be imported into your project
+
+## Examples
+
+To check if UPnP is available:
+```java
+System.out.println(UPnP.isUPnPAvailable() ? "UPnP is available!" : "UPnP isn't available.");
+```
+
+To check if a port is already mapped:
+```java
+System.out.println(String.format("Port 8080 is %s via TCP", UPnP.isMappedTCP(8080) ? "open" : "closed"));
+System.out.println(String.format("Port 8080 is %s via UDP", UPnP.isMappedUDP(8080) ? "open" : "closed"));
+```
+
+To open a port via UPnP:
+```java
+System.out.println(String.format("Port 8080 %s via TCP", UPnP.openPortTCP(8080) ? "is now open" : "couldn't be opened"));
+System.out.println(String.format("Port 8080 %s via UDP", UPnP.openPortUDP(8080) ? "is now open" : "couldn't be opened"));
+```
+
+To close a port via UPnP:
+```java
+System.out.println(String.format("Port 8080 %s closed via TCP", UPnP.closePortTCP(8080) ? "is now" : "couldn't be"));
+System.out.println(String.format("Port 8080 %s closed via UDP", UPnP.closePortUDP(8080) ? "is now" : "couldn't be"));
+```
+
+To get the local and/or external IP via UPnP Gateway:
+```java
+System.out.println("The currect local ip address is " + UPnP.getLocalIP());
+System.out.println("The currect external ip address is " + UPnP.getExternalIP());
+```
 
 ## Compatibility
 
