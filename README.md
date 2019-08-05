@@ -30,7 +30,7 @@ Then, import it into your project:
 <dependency>
     <groupId>com.fdossena</groupId>
     <artifactId>waifupnp</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.1.0-SNAPSHOT</version>
 </dependency>
 ```
 
