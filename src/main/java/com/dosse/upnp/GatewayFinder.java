@@ -37,6 +37,7 @@ abstract class GatewayFinder {
         SEARCH_MESSAGES = m.toArray(new String[]{});
     }
 
+    private boolean found = false;
     private LinkedList<GatewayListener> listeners = new LinkedList<GatewayListener>();
 
     public GatewayFinder() {
@@ -78,6 +79,8 @@ abstract class GatewayFinder {
     }
 
     public boolean isSearching() {
+        if(found)
+            return false;
         for (GatewayListener l : listeners) {
             if (l.isAlive()) {
                 return true;
@@ -106,20 +109,20 @@ abstract class GatewayFinder {
                 DatagramSocket s = new DatagramSocket(new InetSocketAddress(ip, 0));
                 s.send(new DatagramPacket(req, req.length, new InetSocketAddress("239.255.255.250", 1900)));
                 s.setSoTimeout(3000);
-                for (; ; ) {
+                while (!found) {
                     try {
                         DatagramPacket recv = new DatagramPacket(new byte[1536], 1536);
                         s.receive(recv);
                         Gateway gw = new Gateway(recv.getData(), ip);
+                        found = true;
                         gatewayFound(gw);
-                    } catch (SocketTimeoutException t) {
+                    } catch (SocketTimeoutException ignored) {
                         break;
-                    } catch (Throwable t) {
+                    } catch (Throwable ignored) {
                     }
                 }
             } catch (Throwable t) {
             }
         }
     }
-
 }

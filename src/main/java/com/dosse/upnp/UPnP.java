@@ -43,11 +43,10 @@ public class UPnP {
      * It is not necessary to call this method manually before using UPnP functions
      */
     public static void waitInit() {
-        while (finder.isSearching()) {
+        while (finder.isSearching() && defaultGW == null) {
             try {
                 Thread.sleep(1);
-            } catch (InterruptedException ex) {
-            }
+            } catch (InterruptedException ignored) { }
         }
     }
 
