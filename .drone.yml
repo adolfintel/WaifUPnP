@@ -1,0 +1,5 @@
+pipeline:
+  build:
+    image: maven:3.3-jdk-8
+    commands:
+      - mvn clean install

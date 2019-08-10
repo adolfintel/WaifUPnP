@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA 02110-1301  USA
  */
-package com.dosse.upnp;
+package com.xiamli.upnp;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;

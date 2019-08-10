@@ -1,5 +1,6 @@
-package com.dosse.upnp;
+package com.xiamli.upnp;
 
+import com.xiamli.upnp.UPnP;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
