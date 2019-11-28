@@ -82,9 +82,15 @@ public class UPnP {
      * 
      * @return true if available, false if not
      */
+    public static boolean hasPorted;
     public static boolean isUPnPAvailable(){
+		if(!UPnP.isUPnPUpNow() && hasPorted)
+		{
+		   UPnP.refreshProgram();
+		}
         waitInit();
-        return defaultGW!=null;
+        hasPorted = true;
+        return UPnP.isUPnPUpNow();
     }
     
     /**
