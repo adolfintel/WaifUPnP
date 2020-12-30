@@ -128,7 +128,7 @@ public class UPnP {
      */
     public static boolean isMappedUDP(int port) {
         if(!isUPnPAvailable()) return false;
-        return defaultGW.isMapped(port, false);
+        return defaultGW.isMapped(port, true);
     }
     
     /**
