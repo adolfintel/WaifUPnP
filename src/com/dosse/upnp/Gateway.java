@@ -20,6 +20,7 @@ package com.dosse.upnp;
 
 import java.net.HttpURLConnection;
 import java.net.Inet4Address;
+import java.net.InetAddress;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -39,11 +40,13 @@ import org.w3c.dom.traversal.NodeIterator;
 class Gateway {
 
     private Inet4Address iface;
+    private InetAddress gwip;
 
     private String serviceType = null, controlURL = null;
 
-    public Gateway(byte[] data, Inet4Address ip) throws Exception {
+    public Gateway(byte[] data, Inet4Address ip, InetAddress gatewayip) throws Exception {
         iface = ip;
+        gwip=gatewayip;
         String location = null;
         StringTokenizer st = new StringTokenizer(new String(data), "\n");
         while (st.hasMoreTokens()) {
@@ -134,6 +137,8 @@ class Gateway {
     public String getLocalIP() {
         return iface.getHostAddress();
     }
+
+    public String getGatewayIP(){ return gwip.getHostAddress(); }
 
     public String getExternalIP() {
         try {

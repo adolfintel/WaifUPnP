@@ -57,6 +57,8 @@ abstract class GatewayFinder {
 
         @Override
         public void run() {
+            boolean foundgw=false;
+            Gateway gw=null;
             try {
                 byte[] req = this.req.getBytes();
                 DatagramSocket s = new DatagramSocket(new InetSocketAddress(ip, 0));
@@ -66,14 +68,21 @@ abstract class GatewayFinder {
                     try {
                         DatagramPacket recv = new DatagramPacket(new byte[1536], 1536);
                         s.receive(recv);
-                        Gateway gw = new Gateway(recv.getData(), ip);
-                        gatewayFound(gw);
+                        gw = new Gateway(recv.getData(), ip, recv.getAddress());
+                        String extIp= gw.getExternalIP();
+                        if( (extIp!=null) && (!extIp.equalsIgnoreCase("0.0.0.0")) ){ //Exclude gateways without an external IP
+                            gatewayFound(gw);
+                            foundgw=true;
+                        }
                     } catch (SocketTimeoutException t) {
                         break;
                     } catch (Throwable t) {
                     }
                 }
             } catch (Throwable t) {
+            }
+            if( (!foundgw) && (gw!=null)){ //Pick the last GW if none have an external IP - internet not up yet??
+                gatewayFound(gw);
             }
         }
     }

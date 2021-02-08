@@ -151,4 +151,14 @@ public class UPnP {
         return defaultGW.getLocalIP();
     }
 
+    /**
+     * Gets the  IP address of the router
+     *
+     * @return internal IP address as string, or null if not available
+     */
+    public static String getDefaultGatewayIP(){
+        if(!isUPnPAvailable()) return null;
+        return defaultGW.getGatewayIP();
+    }
+
 }
