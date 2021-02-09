@@ -40,13 +40,13 @@ import org.w3c.dom.traversal.NodeIterator;
 class Gateway {
 
     private Inet4Address iface;
-    private InetAddress gwip;
+    private InetAddress routerip;
 
     private String serviceType = null, controlURL = null;
 
     public Gateway(byte[] data, Inet4Address ip, InetAddress gatewayip) throws Exception {
         iface = ip;
-        gwip=gatewayip;
+        routerip=gatewayip;
         String location = null;
         StringTokenizer st = new StringTokenizer(new String(data), "\n");
         while (st.hasMoreTokens()) {
@@ -134,11 +134,12 @@ class Gateway {
         return ret;
     }
 
+    public String getGatewayIP(){ return routerip.getHostAddress(); }
+
     public String getLocalIP() {
         return iface.getHostAddress();
     }
 
-    public String getGatewayIP(){ return gwip.getHostAddress(); }
 
     public String getExternalIP() {
         try {
