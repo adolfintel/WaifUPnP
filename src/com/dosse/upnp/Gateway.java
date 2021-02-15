@@ -29,9 +29,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.w3c.dom.traversal.DocumentTraversal;
-import org.w3c.dom.traversal.NodeFilter;
-import org.w3c.dom.traversal.NodeIterator;
 
 /**
  * 
@@ -120,12 +117,12 @@ class Gateway {
         conn.setRequestProperty("Content-Length", "" + req.length);
         conn.getOutputStream().write(req);
         Document d = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(conn.getInputStream());
-        NodeIterator iter = ((DocumentTraversal) d).createNodeIterator(d.getDocumentElement(), NodeFilter.SHOW_ELEMENT, null, true);
-        Node n;
-        while ((n = iter.nextNode()) != null) {
+        NodeList nodeList = d.getElementsByTagName("*");
+        for (int i = 0; i < nodeList.getLength(); i++) {
             try {
-                if (n.getFirstChild().getNodeType() == Node.TEXT_NODE) {
-                    ret.put(n.getNodeName(), n.getTextContent());
+                Node node = nodeList.item(i);
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    ret.put(node.getNodeName(), node.getTextContent());
                 }
             } catch (Throwable t) {
             }
