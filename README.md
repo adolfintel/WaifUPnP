@@ -2,7 +2,7 @@
 
 UPnP Port Forwarding for Java couldn't be any easier!
 
-WaifUPnP is an _extermely_ lightweight Java library that allows you to:
+WaifUPnP is an _extremely_ lightweight Java library that allows you to:
 
 - open/close TCP/UDP ports
 - check if there's an UPnP router available
