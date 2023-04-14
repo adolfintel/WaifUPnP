@@ -27,7 +27,8 @@ package com.dosse.upnp;
 public class UPnP {
 
     private static Gateway defaultGW = null;
-    private static final GatewayFinder finder = new GatewayFinder() {
+    private static final String DEFAULT_APP_NAME = "WaifUPnP";
+    private static final GatewayFinder finder = GatewayFinder() {
         @Override
         public void gatewayFound(Gateway g) {
             synchronized (finder) {
@@ -70,8 +71,19 @@ public class UPnP {
      * @return true if the operation was successful, false otherwise
      */
     public static boolean openPortTCP(int port) {
+        return openPortTCP(port, DEFAULT_APP_NAME);
+    }
+
+    /**
+     * Opens a TCP port on the gateway
+     *
+     * @param port TCP port (0-65535)
+     * @param appName custom app name to be used for the rule
+     * @return true if the operation was successful, false otherwise
+     */
+    public static boolean openPortTCP(int port, String appName) {
         if(!isUPnPAvailable()) return false;
-        return defaultGW.openPort(port, false);
+        return defaultGW.openPort(port, false, appName);
     }
     
     /**
@@ -81,8 +93,19 @@ public class UPnP {
      * @return true if the operation was successful, false otherwise
      */
     public static boolean openPortUDP(int port) {
+        return openPortUDP(port, DEFAULT_APP_NAME);
+    }
+
+    /**
+     * Opens a UDP port on the gateway
+     *
+     * @param port UDP port (0-65535)
+     * @param appName custom app name to be used for the rule
+     * @return true if the operation was successful, false otherwise
+     */
+    public static boolean openPortUDP(int port, String appName) {
         if(!isUPnPAvailable()) return false;
-        return defaultGW.openPort(port, true);
+        return defaultGW.openPort(port, true, appName);
     }
     
     /**
