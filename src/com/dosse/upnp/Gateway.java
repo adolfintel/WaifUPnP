@@ -26,6 +26,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 import javax.xml.parsers.DocumentBuilderFactory;
+import org.xml.sax.InputSource;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringReader;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -62,8 +68,40 @@ class Gateway {
         if (location == null) {
             throw new Exception("Unsupported Gateway");
         }
-        Document d;
-        d = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(location);
+        // receiving xml file manually to the buffer
+        byte[] xmlBytes = null;
+        InputStream inputStream = null;
+        ByteArrayOutputStream outputStream = null;
+        try {
+            inputStream = new BufferedInputStream(new URL(location).openConnection().getInputStream());
+            outputStream = new ByteArrayOutputStream();
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, bytesRead);
+            }
+            xmlBytes = outputStream.toByteArray();
+        } catch (IOException e) {
+        } finally {
+            try {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+            } catch (IOException e) {
+            }
+            try {
+                if (outputStream != null) {
+                    outputStream.close();
+                }
+            } catch (IOException e) {
+            }
+        }
+        if (xmlBytes == null) {
+            throw new Exception("Unable to retrieve XML file " + location);
+        }
+        // in some XML files there may be NUL byte at the end of the file that cannot be parse, remove them
+        String xmlString = new String(xmlBytes).replaceAll("\0", "");
+        Document d = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new StringReader(xmlString)));
         NodeList services = d.getElementsByTagName("service");
         for (int i = 0; i < services.getLength(); i++) {
             Node service = services.item(i);
